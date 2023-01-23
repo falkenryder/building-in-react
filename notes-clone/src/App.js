@@ -7,32 +7,49 @@ import Sidebar from './components/Sidebar'
 import Editor from './components/Editor';
 
 export default function App() {
-  const [notes, setNotes] = React.useState([])
+  const [notes, setNotes] = React.useState(() =>
+    JSON.parse(localStorage.getItem("notes")) || []
+  )
+
   const [currentNoteId, setCurrentNoteId] = React.useState(
     (notes[0] && notes[0].id) || ""
   )
 
+  React.useEffect(() => {
+    localStorage.setItem("notes", JSON.stringify(notes))
+  }, [notes])
+
   const createNewNote = () => {
     const newNote = {
       id: nanoid(),
-      body: ""
-      // lastUpdated: date.format(new Date(), 'ddd, MMM DD YYYY')
+      body: "",
+      lastUpdated: Date.now()
     }
     setNotes(prevNotes => [newNote, ...prevNotes])
     setCurrentNoteId(newNote.id)
   }
 
   const updateNote = (text) => {
-    setNotes(prevNotes => prevNotes.map(note => {
-      console.log(note.id === currentNoteId)
-      return note.id === currentNoteId ? {...note, body: text} : note
-    }))
+    setNotes(prevNotes => {
+      let arr = []
+      prevNotes.forEach(note =>
+        note.id === currentNoteId ?
+        arr.unshift({...note, body: text, lastUpdated: Date.now()}) :
+        arr.push(note)
+      )
+      return arr
+    })
   }
 
   const findCurrentNote = () => {
     return notes.find(note => {
       return note.id === currentNoteId
     }) || notes[0]
+  }
+
+  const deleteNote = (event, noteId) => {
+    event.stopPropagation()
+    setNotes(prevNotes => prevNotes.filter(note => note.id !== noteId))
   }
 
   return (
@@ -49,6 +66,7 @@ export default function App() {
             currentNote={findCurrentNote()}
             setCurrentNoteId={setCurrentNoteId}
             newNote={createNewNote}
+            deleteNote={deleteNote}
           />
           {
             currentNoteId && notes.length > 0 &&

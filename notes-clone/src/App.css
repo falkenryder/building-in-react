@@ -34,7 +34,7 @@ button:focus {
   margin: 10px;
 }
 
-.new-note {
+.button {
   cursor: pointer;
   background-color: white;
   border: none;
@@ -60,8 +60,8 @@ button:focus {
 .title {
   overflow: hidden;
   cursor: pointer;
-  display: flex;
-  justify-content: space-between;
+  /* display: flex;
+  justify-content: space-between; */
   align-items: center;
   margin: 0px 15px;
   padding: 0px 10px;
@@ -71,13 +71,28 @@ button:focus {
 .text-snippet {
   padding-inline: 5px;
   font-size: 0.8rem;
-  font-weight: 400;
+  font-weight: bold;
   line-height: 1.2rem;
   color: #4A4E74;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-bottom: 0px;
 }
+.time {
+  display: flex;
+  padding-inline: 5px;
+  font-size: 0.7rem;
+  color: #4A4E74;
+  white-space: nowrap;
+  margin-top: 0px;
+}
+.time p:last-child{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-left: 15px;
+}
+
 
 .selected-note {
   background-color: #4A4E74;
@@ -88,6 +103,10 @@ button:focus {
 .selected-note .text-snippet {
   color: white;
   font-weight: 700;
+}
+
+.selected-note .time {
+  color: white;
 }
 
 .gutter {
