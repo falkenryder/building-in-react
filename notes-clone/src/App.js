@@ -2,9 +2,8 @@ import './App.css';
 import React from 'react';
 import Split from 'react-split';
 import {nanoid} from "nanoid";
-// import date from 'date-and-time';
 import Sidebar from './components/Sidebar'
-import Editor from './components/Editor';
+import TextEditor from './components/TextEditor';
 
 export default function App() {
   const [notes, setNotes] = React.useState(() =>
@@ -70,7 +69,7 @@ export default function App() {
           />
           {
             currentNoteId && notes.length > 0 &&
-            <Editor
+            <TextEditor
               currentNote={findCurrentNote()}
               updateNote={updateNote}
             />

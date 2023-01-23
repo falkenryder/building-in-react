@@ -137,3 +137,22 @@ button:focus {
   align-items: center;
   background-color: whitesmoke;
 }
+.wrapper-class {
+  border: 1px solid #ccc;
+}
+.editor-class {
+  background-color: #FAFBF8;
+  border: 1px solid #cccccc;
+  min-height: 80vh;
+}
+.toolbar-class {
+  border: 1px solid #ccc;
+}
+.toolbar-options div{
+  border: none;
+}
+.toolbar-options div:hover{
+  border:none;
+  background-color: lightgray;
+  border-radius: 5px;
+}
