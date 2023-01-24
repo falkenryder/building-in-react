@@ -57,8 +57,6 @@ export default function App() {
 
   return (
     <main>
-      {
-        notes.length > 0 ?
         <Split
           sizes={[30,70]}
           gutterSize={2}
@@ -80,17 +78,7 @@ export default function App() {
               updateNote={updateNote}
             />
           }
-      </Split> :
-        <div className="no-notes">
-          <h1>You have no notes</h1>
-          <button
-            className="first-note"
-            onClick={createNewNote}
-          >
-            Create new note
-          </button>
-        </div>
-      }
+      </Split>
     </main>
   );
 }
