@@ -7,7 +7,11 @@ import TextEditor from './components/TextEditor';
 
 export default function App() {
   const [notes, setNotes] = React.useState(() =>
-    JSON.parse(localStorage.getItem("notes")) || []
+    JSON.parse(localStorage.getItem("notes")) || [{
+      id: nanoid(),
+      body: "",
+      lastUpdated: Date.now()
+    }]
   )
 
   const [currentNoteId, setCurrentNoteId] = React.useState(
@@ -28,14 +32,14 @@ export default function App() {
     setCurrentNoteId(newNote.id)
   }
 
-  const updateNote = (text) => {
+  const updateNote = (str) => {
     setNotes(prevNotes => {
       let arr = []
       prevNotes.forEach(note =>
         note.id === currentNoteId ?
-        arr.unshift({...note, body: text, lastUpdated: Date.now()}) :
+        arr.unshift({...note, body: str, lastUpdated: Date.now()}) :
         arr.push(note)
-      )
+        )
       return arr
     })
   }
@@ -57,6 +61,7 @@ export default function App() {
         notes.length > 0 ?
         <Split
           sizes={[30,70]}
+          gutterSize={2}
           direction="horizontal"
           className='split'
         >
@@ -71,6 +76,7 @@ export default function App() {
             currentNoteId && notes.length > 0 &&
             <TextEditor
               currentNote={findCurrentNote()}
+              currentNoteId={currentNoteId}
               updateNote={updateNote}
             />
           }

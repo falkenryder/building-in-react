@@ -1,29 +1,32 @@
 import React from "react"
-// import ReactMde from "react-mde"
-// import Showdown from "showdown"
-import { EditorState } from 'draft-js';
+import { convertFromRaw, convertToRaw, EditorState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
-import { convertFromHTML, convertToHTML } from 'draft-convert';
-
+// import date from 'date-and-time';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 
-export default function TextEditor({currentNote, updateNote}) {
+export default function TextEditor({currentNote, currentNoteId, updateNote}) {
   const [editorState, setEditorState] = React.useState(
-    EditorState.createWithContent(convertFromHTML(currentNote.body))
+    currentNote.body === "" ?
+    EditorState.createEmpty() :
+    EditorState.createWithContent(convertFromRaw(JSON.parse(currentNote.body)))
   )
 
   React.useEffect(() => {
-    updateNote(convertToHTML(editorState.getCurrentContent()))
+    updateNote(JSON.stringify(convertToRaw(editorState.getCurrentContent())))
   }, [editorState]);
 
-  // updateNote(convertedContent)
+
+  React.useEffect(() => {
+    currentNote.body === "" ?
+    setEditorState(EditorState.createEmpty()) :
+    setEditorState(EditorState.createWithContent(convertFromRaw(JSON.parse(currentNote.body))))
+  }, [currentNoteId])
 
   const toolbarOptions = {
     options: ["inline", "blockType"],
     inline: {
       options: ["bold", "italic", "underline", "strikethrough"],
-      className: "toolbar-options"
     },
     blockType: {
       inDropdown: true,
@@ -31,15 +34,11 @@ export default function TextEditor({currentNote, updateNote}) {
     },
   };
 
-  const onSetEditorState = (newState) => {
-    setEditorState(newState)
- }
-
   return (
     <div className="pane editor">
       <Editor
         editorState={editorState}
-        onEditorStateChange={onSetEditorState}
+        onEditorStateChange={setEditorState}
         wrapperClassName="wrapper-class"
         editorClassName="editor-class"
         toolbarClassName="toolbar-class"
@@ -48,29 +47,3 @@ export default function TextEditor({currentNote, updateNote}) {
     </div>
   )
 }
-
-// export default function Editor({currentNote, updateNote}) {
-//   const [selectedTab, setSelectedTab] = React.useState("write")
-
-//   const converter = new Showdown.Converter({
-//     tables: true,
-//     simplifiedAutoLink: true,
-//     strikethrough: true,
-//     tasklists: true
-//   })
-
-//   return (
-//     <section className="pane editor">
-//       <ReactMde
-//         value={currentNote.body}
-//         onChange={updateNote}
-//         selectedTab={selectedTab}
-//         onTabChange={setSelectedTab}
-//         generateMarkdownPreview={(markdown) =>
-//           Promise.resolve(converter.makeHtml(markdown))}
-//         minEditorHeight={80}
-//         heightUnits="vh"
-//       ></ReactMde>
-//     </section>
-//   )
-// }
