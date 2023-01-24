@@ -12,7 +12,8 @@ export default function Sidebar(props) {
         onClick={() => props.setCurrentNoteId(note.id)}
       >
         <div><h4 className="text-snippet">
-          { note.body === "" || JSON.parse(note.body).blocks[0].text === "" ? "New Note" : JSON.parse(note.body).blocks[0].text}
+          { note.body !== "" && JSON.parse(note.body).blocks.some((block) => block.text !== "") ?
+          JSON.parse(note.body).blocks.filter(block => block.text !== "")[0].text : "New Note"}
         </h4></div>
         <div className="time"><p>
           { date.format(new Date(), 'D/M/YY') === date.format(new Date(note.lastUpdated), 'D/M/YY') ?
@@ -21,8 +22,10 @@ export default function Sidebar(props) {
           }
         </p>
         <p style={{opacity: "0.7"}}>
-          {note.body !== "" && JSON.parse(note.body).blocks[1]
-          && JSON.parse(note.body).blocks.find((block, idx) => idx !== 0 && block.text !== "").text}
+          {note.body !== "" &&
+           JSON.parse(note.body).blocks.filter(block => block.text !== "").length > 1 &&
+           JSON.parse(note.body).blocks.filter(block => block.text !== "")[1].text
+           }
         </p>
         </div>
       </div>
