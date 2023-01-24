@@ -2,13 +2,16 @@ import './App.css';
 import React from 'react';
 import Split from 'react-split';
 import {nanoid} from "nanoid";
-// import date from 'date-and-time';
 import Sidebar from './components/Sidebar'
-import Editor from './components/Editor';
+import TextEditor from './components/TextEditor';
 
 export default function App() {
   const [notes, setNotes] = React.useState(() =>
-    JSON.parse(localStorage.getItem("notes")) || []
+    JSON.parse(localStorage.getItem("notes")) || [{
+      id: nanoid(),
+      body: "",
+      lastUpdated: Date.now()
+    }]
   )
 
   const [currentNoteId, setCurrentNoteId] = React.useState(
@@ -29,14 +32,14 @@ export default function App() {
     setCurrentNoteId(newNote.id)
   }
 
-  const updateNote = (text) => {
+  const updateNote = (str) => {
     setNotes(prevNotes => {
       let arr = []
       prevNotes.forEach(note =>
         note.id === currentNoteId ?
-        arr.unshift({...note, body: text, lastUpdated: Date.now()}) :
+        arr.unshift({...note, body: str, lastUpdated: Date.now()}) :
         arr.push(note)
-      )
+        )
       return arr
     })
   }
@@ -58,6 +61,7 @@ export default function App() {
         notes.length > 0 ?
         <Split
           sizes={[30,70]}
+          gutterSize={2}
           direction="horizontal"
           className='split'
         >
@@ -70,8 +74,9 @@ export default function App() {
           />
           {
             currentNoteId && notes.length > 0 &&
-            <Editor
+            <TextEditor
               currentNote={findCurrentNote()}
+              currentNoteId={currentNoteId}
               updateNote={updateNote}
             />
           }

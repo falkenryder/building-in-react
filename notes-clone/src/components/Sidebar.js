@@ -1,6 +1,7 @@
 import React from "react"
 import date from 'date-and-time';
 
+
 export default function Sidebar(props) {
   const notesEl = props.notes.map((note) => (
     <div key={note.id}>
@@ -11,7 +12,7 @@ export default function Sidebar(props) {
         onClick={() => props.setCurrentNoteId(note.id)}
       >
         <div><h4 className="text-snippet">
-          {note.body === "" ? "New Note" : note.body.split("\n")[0]}
+          { note.body === "" || JSON.parse(note.body).blocks[0].text === "" ? "New Note" : JSON.parse(note.body).blocks[0].text}
         </h4></div>
         <div className="time"><p>
           { date.format(new Date(), 'D/M/YY') === date.format(new Date(note.lastUpdated), 'D/M/YY') ?
@@ -20,7 +21,8 @@ export default function Sidebar(props) {
           }
         </p>
         <p style={{opacity: "0.7"}}>
-          {note.body.split("\n")[1] && note.body.split("\n")[1]}
+          {note.body !== "" && JSON.parse(note.body).blocks[1]
+          && JSON.parse(note.body).blocks.find((block, idx) => idx !== 0 && block.text !== "").text}
         </p>
         </div>
       </div>
